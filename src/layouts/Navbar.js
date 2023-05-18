@@ -4,9 +4,22 @@ import { Link, useNavigate } from "react-router-dom";
 import firebaseConfiguration from "../firebase";
 export const Navbar = () => {
   const auth = getAuth(firebaseConfiguration);
+
+  /**
+   * below loggedCheck will be evently change
+   * based user auth state
+   */
+
   const [loggedCheck, setLoggedCheck] = useState(false);
   const navigate = useNavigate();
-  const handleEvent = () => {
+
+  /**
+   * this event will fire when user clicks on signout event
+   * @return if user successfull logout it will navigate
+   * to home page
+   */
+
+  const handleSignoutEvent = () => {
     signOut(auth)
       .then(() => {
         alert("Sign-out successful");
@@ -16,6 +29,12 @@ export const Navbar = () => {
         console.log("Sign-out error:", error);
       });
   };
+
+  /**This will execute when user auth changed
+   * example when userLogged in setLoggedCheck
+   * to true else flase
+   */
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       console.log("Auth state changed:", user);
@@ -74,7 +93,7 @@ export const Navbar = () => {
               width: "74px",
               height: "38px",
             }}
-            onClick={handleEvent}
+            onClick={handleSignoutEvent}
           >
             Logout
           </button>

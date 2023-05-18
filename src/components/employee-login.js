@@ -10,25 +10,49 @@ const EmployeeLogin = () => {
     },
   ]);
   const navigate = useNavigate();
+
   const { userName, password } = login;
-  const handleEmployeeLogin = (e) => {
+  /**
+   * this method will execute when user modify input field
+   * @param {*} e -> event
+   */
+  const handleModelEmployeeLogindetalis = (e) => {
     setLogin({ ...login, [e.target.name]: e.target.value });
   };
-  const handleSubmitEmployeeDetalis = (e) => {
-    e.preventDefault();
-    signInWithEmailAndPassword(auth, userName, password)
-      .then(async (userCredential) => {
-        // Signed in
-        //const user = userCredential.user;
+
+  /**
+   * after user submitted the detalis the below method will execute
+   * and it will athucenticate the user with firebase signInWithEmailAndPassword
+   * method
+   */
+
+  const firebaseAuthhandler = async () => {
+    try {
+      const userCredential = signInWithEmailAndPassword(
+        auth,
+        userName,
+        password
+      );
+      if (userCredential) {
         navigate("/empdashboard");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        alert("USER NAME OR PASSWORS MIGHT BE WRONG");
-        console.log(errorCode, errorMessage);
-      });
+      }
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      alert("USER NAME OR PASSWORS MIGHT BE WRONG");
+      console.log(errorCode, errorMessage);
+    }
   };
+
+  const handleSubmitEmployeeLoginDetalis = (e) => {
+    e.preventDefault();
+    firebaseAuthhandler();
+  };
+
+  /**
+   * whenever user clicks on register button this funcation will execute
+   * @returns to employee register page
+   */
 
   const handleRegisterEvent = () => {
     return navigate("/employeeregister");
@@ -36,7 +60,7 @@ const EmployeeLogin = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmitEmployeeDetalis}>
+      <form onSubmit={handleSubmitEmployeeLoginDetalis}>
         <div className="form-group">
           <label htmlFor="exampleInputEmail1">UserName</label>
           <input
@@ -47,7 +71,7 @@ const EmployeeLogin = () => {
             placeholder="Enter email"
             value={userName || ""}
             name="userName"
-            onChange={handleEmployeeLogin}
+            onChange={handleModelEmployeeLogindetalis}
             required
           />
         </div>
@@ -61,7 +85,7 @@ const EmployeeLogin = () => {
             placeholder="Enter password"
             name="password"
             value={password || ""}
-            onChange={handleEmployeeLogin}
+            onChange={handleModelEmployeeLogindetalis}
             required
           />
         </div>

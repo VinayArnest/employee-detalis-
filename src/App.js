@@ -1,13 +1,13 @@
 import "./App.css";
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import EmployeeLogin from "./employee-login";
-import Navbar from "./layouts/Navbar";
-import Contact from "./Contact";
-import EmployeeRegister from "./employee-register";
-import EmployeeDetails from "./employee-details";
-import Home from "./Home";
-import EmployeeDashboard from "./employee-dashboard";
+import Navbar from "./layouts/navbar";
+import EmployeeLogin from "./components/employee-login";
+import Contact from "./components/contact";
+import EmployeeRegister from "./components/employee-register";
+import EmployeeDetails from "./components/employee-details";
+import Home from "./components/home";
+import EmployeeDashboard from "./components/employee-dashboard";
 
 function App() {
   return (

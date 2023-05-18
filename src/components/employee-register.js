@@ -6,6 +6,8 @@ import { getFirestore } from "firebase/firestore";
 const EmployeeRegister = () => {
   const auth = getAuth();
   const db = getFirestore();
+  const navigate = useNavigate();
+
   const [employeeDetalis, setEmployeeDetalis] = useState({
     email: "",
     password: "",
@@ -16,6 +18,9 @@ const EmployeeRegister = () => {
     gender: "",
     address: "",
   });
+  /**
+   * destructering the employeeDetalis
+   */
   const {
     email,
     password,
@@ -26,17 +31,27 @@ const EmployeeRegister = () => {
     gender,
     address,
   } = employeeDetalis;
-  const handleEmployeeDetalis = (e) => {
+
+  /**
+   * this method will execute when user modify input field
+   * @param {*} e -> event
+   */
+
+  const handleModelEmployeeRegisterdetalis = (e) => {
     setEmployeeDetalis({ ...employeeDetalis, [e.target.name]: e.target.value });
   };
-  const navigate = useNavigate();
+
+  /**
+   * this method will store employee detalis with help of firebase function addDoc
+   * @param {*} e
+   */
   const handleSubmitEmployeeDetalis = (e) => {
     e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         const user = userCredential.user;
         try {
-          const docRef = await addDoc(collection(db, "employee-data"), {
+          await addDoc(collection(db, "employee-data"), {
             id: user.uid,
             email: email,
             password: password,
@@ -60,6 +75,7 @@ const EmployeeRegister = () => {
         console.log(errorCode, errorMessage);
       });
   };
+
   return (
     <div>
       <form onSubmit={handleSubmitEmployeeDetalis}>
@@ -73,7 +89,7 @@ const EmployeeRegister = () => {
             placeholder="Enter email"
             name="email"
             value={email}
-            onChange={handleEmployeeDetalis}
+            onChange={handleModelEmployeeRegisterdetalis}
           />
           <small id="emailHelp" className="form-text text-muted">
             We'll never share your email with anyone else.
@@ -89,7 +105,7 @@ const EmployeeRegister = () => {
             placeholder="Enter password"
             name="password"
             value={password}
-            onChange={handleEmployeeDetalis}
+            onChange={handleModelEmployeeRegisterdetalis}
           />
         </div>
         <div className="form-group">
@@ -102,7 +118,7 @@ const EmployeeRegister = () => {
             placeholder="Enter username"
             name="userName"
             value={userName}
-            onChange={handleEmployeeDetalis}
+            onChange={handleModelEmployeeRegisterdetalis}
           />
         </div>
         <div className="form-group">
@@ -115,7 +131,7 @@ const EmployeeRegister = () => {
             placeholder="Enter first_name"
             name="first_name"
             value={first_name}
-            onChange={handleEmployeeDetalis}
+            onChange={handleModelEmployeeRegisterdetalis}
           />
         </div>
         <div className="form-group">
@@ -128,7 +144,7 @@ const EmployeeRegister = () => {
             placeholder="Enter last_name"
             name="last_name"
             value={last_name}
-            onChange={handleEmployeeDetalis}
+            onChange={handleModelEmployeeRegisterdetalis}
           />
         </div>
         <div className="form-group">
@@ -141,7 +157,7 @@ const EmployeeRegister = () => {
             placeholder=""
             name="dob"
             value={dob}
-            onChange={handleEmployeeDetalis}
+            onChange={handleModelEmployeeRegisterdetalis}
           />
         </div>
         <div className="form-group">
@@ -154,7 +170,7 @@ const EmployeeRegister = () => {
             placeholder=""
             name="address"
             value={address}
-            onChange={handleEmployeeDetalis}
+            onChange={handleModelEmployeeRegisterdetalis}
           />
         </div>
         <div className="form-check">
@@ -164,7 +180,7 @@ const EmployeeRegister = () => {
             name="gender"
             id="flexRadioDefault1"
             value="Male"
-            onChange={handleEmployeeDetalis}
+            onChange={handleModelEmployeeRegisterdetalis}
           />
           <label className="form-check-label" htmlFor="flexRadioDefault1">
             Male
@@ -177,7 +193,7 @@ const EmployeeRegister = () => {
             name="gender"
             id="flexRadioDefault2"
             value="Female"
-            onChange={handleEmployeeDetalis}
+            onChange={handleModelEmployeeRegisterdetalis}
           />
           <label className="form-check-label" htmlFor="flexRadioDefault2">
             Female
@@ -190,7 +206,7 @@ const EmployeeRegister = () => {
             name="gender"
             id="flexRadioDefault2"
             value="others"
-            onChange={handleEmployeeDetalis}
+            onChange={handleModelEmployeeRegisterdetalis}
           />
           <label className="form-check-label" htmlFor="flexRadioDefault2">
             others

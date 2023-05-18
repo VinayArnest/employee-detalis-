@@ -12,44 +12,53 @@ import {
 } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import "./employee-dashboard.css";
+
 const employeeDashboard = () => {
   const db = getFirestore();
   const [loading, setLoading] = useState(true);
   const [list, setList] = useState([]);
   const [page, setPage] = useState(1);
+  /**
+   *initialy with useEffect fetching first 5 employee detalis
+   *
+   */
   const fetch = async () => {
-    const q = query(
+    const fetchemployeeReferances = query(
       collection(db, "employee-data"),
       orderBy("timestamp", "desc"),
       limit(5)
     );
-    const res = await getDocs(q);
-    const iteam = [];
+    const res = await getDocs(fetchemployeeReferances);
+    const item = [];
     res.forEach((doc) => {
-      iteam.push({ ...doc.data() });
+      item.push({ ...doc.data() });
     });
-    setList(iteam);
+    setList(item);
+    setLoading(false);
   };
+
   useEffect(() => {
     fetch();
-    setTimeout(() => setLoading(false), 3000);
   }, []);
+
+  /**
+   * This function will fetch next 5 employee detalis on webpage
+   * with help of pervious page lastDoc.it will fetch next five
+   * using startAfter() method from firebase
+   * @returns next 5 employee detalis
+   */
   const Nextpage = () => {
     const lastDoc = list[list.length - 1];
-    console.log("last_doc " + JSON.stringify(lastDoc));
-    const q = query(
+    const fetchEmployeeDataAfterLastDoc = query(
       collection(db, "employee-data"),
       orderBy("timestamp", "desc"),
       limit(5),
       startAfter(lastDoc.timestamp)
     );
     const fetch = async () => {
-      const res = await getDocs(q);
+      const res = await getDocs(fetchEmployeeDataAfterLastDoc);
       const item = [];
       res.forEach((doc) => {
-        console.log(
-          "employee data after qurey creating" + JSON.stringify(doc.data())
-        );
         item.push({ ...doc.data() });
       });
       setList(item);
@@ -57,25 +66,33 @@ const employeeDashboard = () => {
     };
     fetch();
   };
+
+  /**
+   * This function will fetch pervious 5 employee detalis on webpage
+   * with help of current page FirstDoc.it will fetch pervious five
+   * employees using endBefore(FirstDoc) method from firebase
+   * @returns pervious page detalis using current page firstDoc
+   */
   const Perviouspage = () => {
     const firstDoc = list[0];
-    const q = query(
+    const fecthPerviousPageEmployeeData = query(
       collection(db, "employee-data"),
       orderBy("timestamp", "desc"),
       endBefore(firstDoc.timestamp),
       limitToLast(5)
     );
     const fetch = async () => {
-      const res = await getDocs(q);
-      const iteam = [];
+      const res = await getDocs(fecthPerviousPageEmployeeData);
+      const item = [];
       res.forEach((doc) => {
-        iteam.push({ ...doc.data() });
+        item.push({ ...doc.data() });
       });
-      setList(iteam);
+      setList(item);
       setPage(page - 1);
     };
     fetch();
   };
+
   if (loading) {
     return (
       <div>
@@ -83,6 +100,7 @@ const employeeDashboard = () => {
       </div>
     );
   }
+
   return (
     !loading && (
       <div>
